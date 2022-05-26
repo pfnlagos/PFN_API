@@ -2,9 +2,12 @@ const express = require('express')
 let nodemailer = require('nodemailer')
 const bodyParser = require('body-parser')
 const creds = require('./credential.json')
+const PORT = process.env.PORT || 5000
 const cors = require("cors");
+const dotenv = require("dotenv")
 
 let app = express()
+dotenv.config()
 
 const path = require('path');
 const connectDb = require('./config/db');
@@ -140,5 +143,4 @@ transporter.verify(function (err, success) {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/post", require("./routes/post"));
 
-const PORT = process.env.PORT || 5000
-app.listen(PORT, ()=> console.log('server has started', PORT))
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`))
