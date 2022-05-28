@@ -26,10 +26,7 @@ app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 
 app.get('/', (req, res) => {
-    res
-      .status(200)
-      .send('Hello, App is running')
-    //   .end();
+    res.send('Hello, App is running')
   });
 
 let transporter = nodemailer.createTransport({
