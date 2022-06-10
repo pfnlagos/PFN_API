@@ -1,6 +1,9 @@
 const Post = require('../model/Post')
 const User = require('../model/User')
 const mongoose = require("mongoose");
+const cloudinary = require('../utils/cloudinary')
+const router = require('express').Router()
+const upload = require('../utils/multer')
 
 // Create route
 exports.createData = async (req, res) => {
@@ -13,6 +16,28 @@ exports.createData = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+// router.post('/', upload.single('image'), (async(req, res)=> {
+//   try {
+//       const result = await cloudinary.uploader.upload(req.file.path)
+
+//       //create instance of user
+//       let user = new Post({
+//           name: req.body.name,
+//           title: req.body.title,
+//           desc: req.body.desc,
+//           date: req.body.date,
+//           selectedFile: result.secure_url,
+//           cloudinary_id: result.public_id
+//       })
+
+//       //save user
+//       await user.save()
+//       res.json(user)
+//   } catch (error) {
+//       console.log(error);
+//   }
+// }))
 
 // Read route
 exports.getData = async (req, res) => {

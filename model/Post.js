@@ -7,6 +7,12 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    cloudinary_id: {
+      type: String
+  },
+  avatar: {
+        type: String
+    },
     desc: {
       type: String,
       required: true,

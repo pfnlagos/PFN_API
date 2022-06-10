@@ -5,6 +5,7 @@ const creds = require('./credential.json')
 const PORT = process.env.PORT || 5000
 const cors = require("cors");
 const dotenv = require("dotenv")
+const mongoose = require("mongoose")
 
 let app = express()
 dotenv.config()
@@ -51,7 +52,7 @@ app.post('/mail', (req, res, next)=> {
 
     const mailOption = {
         from: email,
-        to: "ezeyimf@gmail.com",
+        to: "pfnlagostate@gmail.com",
         subject: `New message from ${name} via contact page`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
@@ -81,7 +82,7 @@ app.post('/directorate', (req, res, next)=> {
 
     const mailOption = {
         from: email,
-        to: "ezeyimf@gmail.com",
+        to: "pfnlagostate@gmail.com",
         subject: `New message from ${fullname} via PFN Directorate Page`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
@@ -109,7 +110,7 @@ app.post('/prayer-request', (req, res, next)=> {
 
     const mailOption = {
         from: email,
-        to: "ezeyimf@gmail.com",
+        to: "pfnlagostate@gmail.com",
         subject: `New message from ${name} via PFN Directorate Page`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
@@ -139,5 +140,16 @@ transporter.verify(function (err, success) {
 //Controller
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/post", require("./routes/post"));
+app.use("/post", require("./routes/posts"));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}!`))
+app.use('/cloudUser', require('./routes/cloudUser'))
+app.use('/upcomingEvent', require('./routes/upcomingEvent'))
+app.use('/currentEvent', require('./routes/currentEvent'))
+app.use('/pastEvent', require('./routes/pastEvent'))
+
+const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}!`))
+
+process.on("unhandledRejection", (err, promise)=> {
+    console.log(`Logged Error: ${err}`);
+    server.close(()=> process.exit(1))
+})
