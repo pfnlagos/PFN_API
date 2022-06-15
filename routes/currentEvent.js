@@ -13,6 +13,8 @@ router.post('/', upload.single('image'), (async(req, res)=> {
             title: req.body.title,
             desc: req.body.desc,
             date: req.body.date,
+            time: req.body.time,
+            venue: req.body.venue,
             avatar: result.secure_url,
             cloudinary_id: result.public_id
         })

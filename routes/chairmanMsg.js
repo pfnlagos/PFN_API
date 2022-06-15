@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const UpcomingEvent = require('../model/UpcomingEvent')
+const ChairmanMsg = require('../model/ChairmanMsg')
 const cloudinary = require('../utils/cloudinary')
 const upload = require('../utils/multer')
 
@@ -8,14 +8,11 @@ router.post('/', upload.single('image'), (async(req, res)=> {
         const result = await cloudinary.uploader.upload(req.file.path)
 
         //create instance of user
-        let user = new UpcomingEvent({
+        let user = new ChairmanMsg({
             name: req.body.name,
             title: req.body.title,
             desc: req.body.desc,
             date: req.body.date,
-            date: req.body.date,
-            time: req.body.time,
-            venue: req.body.venue,
             avatar: result.secure_url,
             cloudinary_id: result.public_id
         })
@@ -25,11 +22,12 @@ router.post('/', upload.single('image'), (async(req, res)=> {
         res.json(user)
     } catch (error) {
         console.log(error);
+        res.status(404).json({message: error.message})
     }
 }))
 router.get('/', async(req, res)=> {
     try {
-        let user = await UpcomingEvent.find()
+        let user = await ChairmanMsg.find()
         res.json(user)
     } catch (error) {
         console.log(error);
@@ -40,7 +38,7 @@ router.get('/', async(req, res)=> {
 router.get('/:id', async(req, res)=> {
     const {id} = req.params;
     try {
-      const post = await UpcomingEvent.findById(id);
+      const post = await ChairmanMsg.findById(id);
       res.status(200).json(post)
     } catch (error) {
       res.status(404).json({message: error.message})
@@ -49,7 +47,7 @@ router.get('/:id', async(req, res)=> {
 
 router.delete("/:id", async(req, res)=> {
     try {
-        let user = await UpcomingEvent.findById(req.params.id)
+        let user = await ChairmanMsg.findById(req.params.id)
 
         //delete image from cloudinary
         await cloudinary.uploader.destroy(user.cloudinary_id)
@@ -65,7 +63,7 @@ router.delete("/:id", async(req, res)=> {
 
 router.put('/:id ', upload.single('image'), (async(req, res)=> {
     try {
-        let user = await UpcomingEvent.findById(req.params.id)
+        let user = await ChairmanMsg.findById(req.params.id)
         await cloudinary.uploader.destroy(user.cloudinary_id)
         const result = await cloudinary.uploader.upload(req.file.path)
 
@@ -75,7 +73,7 @@ router.put('/:id ', upload.single('image'), (async(req, res)=> {
             cloudinary_id: result.public_id || user.cloudinary_id
         }
 
-        user = await UpcomingEvent.findByIdAndUpdate(req.params.id, data, {new: true})
+        user = await ChairmanMsg.findByIdAndUpdate(req.params.id, data, {new: true})
         res.json(user)
 
     } catch (error) {

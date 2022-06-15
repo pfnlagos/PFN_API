@@ -19,6 +19,9 @@ const currentEventSchema = new mongoose.Schema({
     date: {
         type: String
     },
+    time: {
+        type: String
+    },
     venue: {
         type: String
     }

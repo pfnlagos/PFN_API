@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const pastEventSchema = new mongoose.Schema({
+const chairmanMsgSchema = new mongoose.Schema({
     name: {
         type: String,
     },
@@ -15,16 +15,7 @@ const pastEventSchema = new mongoose.Schema({
     },
     desc: {
         type: String
-    },
-    date: {
-        type: String
-    },
-    time: {
-        type: String
-    },
-    venue: {
-        type: String
     }
-})
+}, { timestamps: true })
 
-module.exports = mongoose.model('PastEvent', pastEventSchema)
+module.exports = mongoose.model('ChairmanMsg', chairmanMsgSchema)

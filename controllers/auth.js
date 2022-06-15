@@ -27,7 +27,7 @@ exports.registerUser = async (req, res, next) => {
 };
 
 //Login
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return next(new ErrorResponse("Please provide username and password", 400));
@@ -35,12 +35,17 @@ exports.loginUser = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email }).select("+password");
-    !user && next(new ErrorResponse("Wrong Credentials", 400));
+    if (!user) {
+      next(new ErrorResponse("Wrong Credentials", 400));
+    }
+    // !user && next(new ErrorResponse("Wrong Credentials", 400));
     // res.status(400).json("Wrong Credentials");
 
     const isMatch = await user.matchPassword(password);
-
-    !isMatch && next(new ErrorResponse("Wrong Credentials", 400));
+    if (!isMatch) {
+      next(new ErrorResponse("Wrong Credentials", 400))
+    }
+    // !isMatch && next(new ErrorResponse("Wrong Credentials", 400));
     // res.status(404).json({ success: false, error: "Wrong Credentials" });
     // res.status(200).json({
     //   success: true,
@@ -51,7 +56,8 @@ exports.loginUser = async (req, res) => {
     res.status(201).json({ user});
     
   } catch (err) {
-    res.status(500).json(err);
+    // res.status(500).json(err);
+    next(err)
   }
 };
 

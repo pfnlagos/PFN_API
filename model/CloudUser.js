@@ -19,9 +19,12 @@ const cloudUserSchema = new mongoose.Schema({
     date: {
         type: String
     },
+    time: {
+        type: String
+    },
     venue: {
         type: String
     }
-})
+},{ timestamps: true })
 
 module.exports = mongoose.model('CloudUser', cloudUserSchema)

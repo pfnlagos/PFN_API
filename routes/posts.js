@@ -26,7 +26,7 @@ router.post('/', upload.single('image'), (async(req, res)=> {
 }))
 router.get('/', async(req, res)=> {
     try {
-        let user = await Post.find()
+        let user = await Post.find().sort({_id: -1})
         res.json(user)
     } catch (error) {
         console.log(error);

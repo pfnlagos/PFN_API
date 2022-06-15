@@ -1,7 +1,6 @@
 const express = require('express')
 let nodemailer = require('nodemailer')
 const bodyParser = require('body-parser')
-const creds = require('./credential.json')
 const PORT = process.env.PORT || 5000
 const cors = require("cors");
 const dotenv = require("dotenv")
@@ -23,6 +22,12 @@ app.use(cors());
 // Static folder
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+app.use(express.json());
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 
@@ -31,12 +36,12 @@ app.get('/', (req, res) => {
   });
 
 let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    host: "pfnlagosstate.org",
+    port: 465,
+    secure: true,
     auth: {
-        user: creds.auth.user,
-        pass: creds.auth.pass
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS
     }
 })
 
@@ -48,12 +53,12 @@ app.post('/mail', (req, res, next)=> {
     // var company = req.body.company
     var phone = req.body.phone
     var location = req.body.location
-    var content= `${name} from ${location} \n name: ${name} \n email: ${email} \n phone: ${phone} \n location: ${location} \n message: ${message}`
+    var content= `${name} from ${location} \n\n name: ${name} \n\n email: ${email} \n\n phone: ${phone} \n\n location: ${location} \n\n message: ${message}`
 
     const mailOption = {
         from: email,
-        to: "pfnlagostate@gmail.com",
-        subject: `New message from ${name} via contact page`,
+        to: "info@pfnlagosstate.org",
+        subject: `New message from ${name} via PFN Lagos State Contact Page`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
     }
@@ -77,13 +82,14 @@ app.post('/directorate', (req, res, next)=> {
     var fullname = req.body.fullname
     var address = req.body.address
     var phone = req.body.phone
+    var directorat = req.body.directorat
 
-    var content= `${fullname} from ${province} \n Full name: ${fullname} \n Email: ${email} \n Phone: ${phone} \n Province: ${province} \n Address: ${address} \n Message: ${message}`
+    var content= `${fullname} from ${province} \n\n To ${directorat} \n\n Full name: ${fullname} \n\n Email: ${email} \n\n  Phone: ${phone} \n\n Province: ${province} \n\n Address: ${address} \n\n Message: ${message}`
 
     const mailOption = {
         from: email,
-        to: "pfnlagostate@gmail.com",
-        subject: `New message from ${fullname} via PFN Directorate Page`,
+        to: "info@pfnlagosstate.org",
+        subject: `New message from ${fullname} via PFN Lagos state Directorate Page`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
     }
@@ -106,12 +112,12 @@ app.post('/prayer-request', (req, res, next)=> {
     var name = req.body.name
     var address = req.body.address
 
-    var content= `${name} from ${address} \n Full name: ${name} \n Email: ${email} \n Request: ${request}`
+    var content= `${name} from ${address} \n\n Full name: ${name} \n\n Email: ${email} \n\n Request: ${request}`
 
     const mailOption = {
         from: email,
-        to: "pfnlagostate@gmail.com",
-        subject: `New message from ${name} via PFN Directorate Page`,
+        to: "info@pfnlagosstate.org",
+        subject: `New message from ${name} via Prayer Request`,
         text: content
         // html: `${name} from ${company} <noreply@${name}.com> <br /> ${phone} <br /> ${location} <br /> ${message}`
     }
@@ -141,11 +147,13 @@ transporter.verify(function (err, success) {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/post", require("./routes/post"));
 app.use("/post", require("./routes/posts"));
+app.use("/api/auth2", require("./routes/auth2"));
 
 app.use('/cloudUser', require('./routes/cloudUser'))
 app.use('/upcomingEvent', require('./routes/upcomingEvent'))
 app.use('/currentEvent', require('./routes/currentEvent'))
 app.use('/pastEvent', require('./routes/pastEvent'))
+app.use('/chairmanMsg', require('./routes/chairmanMsg'))
 
 const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}!`))
 
