@@ -8,11 +8,7 @@ const Post = require("../model/Post")
 exports.registerUser = async (req, res, next) => {
   const { username, email, password } = req.body;
   try {
-    const user = await User.create({ username, email, password });
 
-    // const token = jwt.sign({id: user._id, email: user.email}, `${process.env.JWT_SECRET}`, {expiresIn: "10min"})
-    res.status(201).json({ user});
-    // sendToken(user, 201, res);
 
     const existingUser = await User.findOne({ email });
     if (existingUser){
@@ -20,6 +16,13 @@ exports.registerUser = async (req, res, next) => {
       return res.status(400).json({ message: "User Already Exist" });
     }
 
+    const user = await User.create({ username, email, password });
+
+    // const token = jwt.sign({id: user._id, email: user.email}, `${process.env.JWT_SECRET}`, {expiresIn: "10min"})
+  return  res.status(201).json({ user});
+    // sendToken(user, 201, res);
+
+  
   } catch (err) {
     // res.status(500).json(err)
     next(err);
