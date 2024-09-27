@@ -42,10 +42,14 @@ let transporter = nodemailer.createTransport({
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS
     }
+    // auth: {
+    //     user: "info@pfnlagosstate.org",
+    //     pass: "LagosPFN_sTATE231"
+    // }
 })
 
 app.post('/mail', (req, res, next)=> {
-    var email = req.body.email
+    var email = req.body.email 
     var message = req.body.message
     // var subject = req.body.subject
     var name = req.body.name
@@ -70,9 +74,9 @@ app.post('/mail', (req, res, next)=> {
             res.json({status: "success"})
             console.log("Email Sent" + data.response);
         }
-    })
+    });
 
-})
+});
 
 app.post('/directorate', (req, res, next)=> {
     var email = req.body.email
@@ -81,7 +85,7 @@ app.post('/directorate', (req, res, next)=> {
     var fullname = req.body.fullname
     var address = req.body.address
     var phone = req.body.phone
-    var directorat = req.body.directorat
+    var directorat = req.body.directorate
 
     var content= `${fullname} from ${province} \n\n To ${directorat} \n\n Full name: ${fullname} \n\n Email: ${email} \n\n  Phone: ${phone} \n\n Province: ${province} \n\n Address: ${address} \n\n Message: ${message}`
 
