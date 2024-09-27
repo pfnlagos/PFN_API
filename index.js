@@ -143,10 +143,10 @@ transporter.verify(function (err, success) {
 
 
 //Controller
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/post", require("./routes/post"));
+app.use("/auth", require("./routes/auth"));
+app.use("/post", require("./routes/post"));
 app.use("/post", require("./routes/posts"));
-app.use("/api/auth2", require("./routes/auth2"));
+app.use("/auth2", require("./routes/auth2"));
 
 app.use('/cloudUser', require('./routes/cloudUser'))
 app.use('/upcomingEvent', require('./routes/upcomingEvent'))
