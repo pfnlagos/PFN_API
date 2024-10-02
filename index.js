@@ -14,6 +14,9 @@ console.log("MONGO_URI:", process.env.MONGO_URI);
 const path = require('path');
 const connectDb = require('./config/db');
 
+const cloudinary = require("cloudinary").v2;
+
+
 //Use cors
 
 //Connect database
@@ -142,6 +145,40 @@ transporter.verify(function (err, success) {
         console.log("Server is ready to take the emails " + success);
     }
 })
+
+
+// ================================================================= //
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+app.get("/api/images", async (req, res) => {
+  try {
+    const { next_cursor } = req.query;
+    const result = await cloudinary.api.resources({
+      type: "upload",
+      max_results: 500, 
+      next_cursor: next_cursor || undefined 
+    });
+
+    res.status(200).json({
+      success: true,
+      images: result.resources,
+      next_cursor: result.next_cursor 
+    });
+  } catch (error) {
+    console.error("Error fetching images from Cloudinary:", error);
+    res.status(500).json({
+      success: false,
+      message: "Unable to fetch images",
+      error
+    });
+  }
+});
+
 
 
 //Controller
