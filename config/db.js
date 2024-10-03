@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 //Database connection
 const connectDb = async() => {
     // await mongoose.connect( "mongodb://localhost:27017/pfn_blog_data",
@@ -19,6 +18,10 @@ const connectDb = async() => {
          }
        }
      );
-   
    }
    module.exports = connectDb
+
+
+
+
+
